@@ -1,16 +1,23 @@
 # Rack::BodyParser #
 
 Rack middleware that provides a way to parse the request body without touching 
-`params` or `request.params`. Instead the parser output is available through `env['parsed_body']` or optionally through the Rack::Request object as `request.parsed_body` and/or a custom attribute per parser.
+`params` or `request.params`. 
 
-Rack::BodyParser is heavily inspired by [Rack::Parser](https://github.com/achiu/rack-parser).
+Instead the parser output is available through `env['parsed_body']` or 
+optionally through the Rack::Request object as `request.parsed_body` and/or 
+a custom attribute per parser.
 
-## Key Features ##
+Rack::BodyParser is heavily inspired by 
+[Rack::Parser](https://github.com/achiu/rack-parser).
+
+## Key Features (differences to Rack::Parser) ##
 
 1. seperation of `params`/`request.params` and the `parsed_body`.
 1. (optional) patching of `Rack::Request`:
 
-  Access parsed payload through `request.parsed_body` with support for custom `request.#{your_key_here}` per parser. Enable with `:patch_request => true`.
+  Access parsed payload through `request.parsed_body` with support 
+  for custom `request.#{your_key_here}` per parser. 
+  Enable with `:patch_request => true`.
 
 Note: Rack::BodyParser **does** **not** contain any parsers by out of the box.
 
@@ -22,7 +29,8 @@ Note: Rack::BodyParser **does** **not** contain any parsers by out of the box.
 
 Define your parsers per content_type. 
 
-Rack::BodyParser accepts `String` or `Regexp` keys as content_type, and a `Proc`, or anything that `respond_to? 'call'` as parser.
+Rack::BodyParser accepts `String` or `Regexp` keys as content_type, 
+and anything that `respond_to? 'call'` as parser.
 
 Sinatra example:
 
@@ -30,10 +38,9 @@ Sinatra example:
 # app.rb
 
 use Rack::BodyParser, :parsers => { 
-  'application/json'         => proc { |data| JSON.parse data },
-  'application/vnd.api+json' => proc { |data| JSON::API.parse(JSON.parse(data)) },
-  'application/xml'          => proc { |data| XML.parse data },
-  %r{msgpack}                => proc { |data| Msgpack.parse data }
+  'application/json' => proc { |data| JSON.parse data },
+  'application/xml'  => proc { |data| XML.parse data },
+  %r{msgpack}        => proc { |data| Msgpack.parse data }
 }
 
 post '/' do
@@ -43,9 +50,11 @@ end
 
 ### Error Handling ###
 
-Rack::BodyParser has one default error handler that can be overridden by setting
-the 'default' handler. These works like `:parsers`. Use a `String` or `Regexp` as
-content_type key and a `Proc`, or anything that `respond_to? 'call'` as error handler. The error handler must accept the two parameters `Error` and `type` (the content type).
+Rack::BodyParser has one default error handler that can be overridden by 
+setting the 'default' handler. These works like `:parsers`. Use a `String` or 
+`Regexp` as content_type key and anything that `respond_to? 'call'` as the
+error handler. The error handler must accept the two parameters 
+`Error` and `type` (the content type).
 
 ```ruby
 use Rack::Parser, :handlers => {
@@ -57,8 +66,8 @@ use Rack::Parser, :handlers => {
 
 Rack::BodyParsers will try to `warn` of a `logger` is present.
 
-Do note, the error handler rescues exceptions that are descents of `StandardError`. See
-http://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/
+Note: the error handler rescues exceptions that are descents of `StandardError`. 
+See http://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/
 
 ## Patch Rack::Request ##
 
@@ -120,5 +129,6 @@ open PRs)
 
 ## Copyright
 
-Copyright © 2016 Aaron Heesakkers. See [MIT-LICENSE](https://github.com/aars/rack-bodyparser/blob/master/MIT-LICENSE) for details.
+Copyright © 2016 Aaron Heesakkers. 
+See [MIT-LICENSE](https://github.com/aars/rack-bodyparser/blob/master/MIT-LICENSE) for details.
 

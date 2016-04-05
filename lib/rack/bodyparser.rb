@@ -16,9 +16,10 @@ module Rack
 
     def initialize(app, options = {})
       @app           = app
+      @patch_request = options.delete(:patch_request)
       @parsers       = options.delete(:parsers)  || {}
       @handlers      = options.delete(:handlers) || {}
-      @patch_request = options.delete(:patch_request)
+      @handlers      = {'default' => ERROR_HANDLER}.merge(@handlers)
     end
 
     def call(env)
@@ -32,7 +33,7 @@ module Rack
           patch_rack_request parser, parsed if @patch_request
         rescue StandardError => e
           warn! e, type
-          handler = (detect(handlers, type) || ['default', ERROR_HANDLER]).last
+          handler = (detect(handlers, type) || detect(handlers, 'default')).last
           return handler.call e, type
         end
       end

@@ -119,7 +119,6 @@ post '/' do
 end
 ```
 
-```
 ## Inspirations ##
 
 This project is heavily inspired by [Rack::Parser](https://github.com/achiu/rack-parser). I built
@@ -130,6 +129,7 @@ open PRs)
 
 ## Copyright
 
-Copyright © 2016 Aaron Heesakkers. 
+`Copyright © 2016 Aaron Heesakkers.`
+
 See [MIT-LICENSE](https://github.com/aars/rack-bodyparser/blob/master/MIT-LICENSE) for details.
 

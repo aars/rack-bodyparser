@@ -9,7 +9,10 @@ Gem::Specification.new do |s|
   s.email       = ["aaronheesakkers@gmail.com"]
   s.homepage    = "https://www.github.com/aars/rack-bodyparser"
   s.summary     = %q{Rack Middleware for parsing request body}
-  s.description = %q{Rack Middleware for parsing request body}
+  s.description = %q{
+    Rack Middleware for parsing request body without touching request.params.
+    Allowing full seperation of query_string params and body payload.
+  }
 
   s.rubyforge_project = "rack-bodyparser"
 

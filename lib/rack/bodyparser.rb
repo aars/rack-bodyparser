@@ -6,38 +6,39 @@ module Rack
     RACK_ENV_KEY     = 'parsed_body'.freeze
     # Where to store in Rack::Request in case of options[:patch_request]
     RACK_REQUEST_KEY = 'parsed_body'.freeze
+
     # Default error handler
     ERROR_MESSAGE = "[Rack::BodyParser] Failed to parse %s: %s\n"
     ERROR_HANDLER = proc { |e, type|
       [400, {}, [ERROR_MESSAGE % [type, e.to_s]]]
     }
-
-    attr_reader :app, :parsers, :handlers, :logger
+    attr_reader :parsers, :handlers, :logger
 
     def initialize(app, options = {})
-      @app           = app
-      @patch_request = options.delete(:patch_request)
-      @parsers       = options.delete(:parsers)  || {}
-      @handlers      = options.delete(:handlers) || {}
-      @handlers      = {'default' => ERROR_HANDLER}.merge(@handlers)
+      @app      = app
+      @parsers  = options.delete(:parsers)  || {}
+      @handlers = options.delete(:handlers) || {}
+      @handlers = {'default' => ERROR_HANDLER}.merge(@handlers)
+      @options  = options
     end
 
     def call(env)
       type   = Rack::Request.new(env).media_type
-      parser = type && detect(parsers, type).last
+      parser = type && detect(parsers, type)
       body   = parser && env[REQUEST_BODY].read; env[REQUEST_BODY].rewind
       if body && !body.empty?
+        parser = parser.last
         begin
           parsed = parser.call body
           env.update RACK_ENV_KEY => parsed
-          patch_rack_request parser, parsed if @patch_request
+          patch_rack_request parser, parsed if @options[:patch_request]
         rescue StandardError => e
           warn! e, type
           handler = (detect(handlers, type) || detect(handlers, 'default')).last
           return handler.call e, type
         end
       end
-      app.call env
+      @app.call env
     end
 
     def patch_rack_request(parser, parsed)

@@ -122,10 +122,7 @@ end
 ## Inspirations ##
 
 This project is heavily inspired by [Rack::Parser](https://github.com/achiu/rack-parser). I built
-this because I did not want to mix `params` and the body payload. Also because Rack::Parser contains
-a ['bug'](https://github.com/achiu/rack-parser/issues/15) in it's content_type keys (which are always
-used as `Regexp` through `String.match` and it looks like Rack::Parser might be abandoned (very old 
-open PRs)
+this because I did not want to mix `params` and the body payload.
 
 ## Copyright
 

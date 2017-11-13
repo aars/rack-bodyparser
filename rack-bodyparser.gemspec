@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Rack Middleware for parsing request body'
   s.description = %(
     Rack Middleware for parsing request body without touching request.params.
-    Allowing full seperation of query_string params and body payload.
+    Allowing full separation of query_string params and body payload.
   )
 
   s.files         = `git ls-files`.split("\n")

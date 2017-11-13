@@ -13,7 +13,7 @@ Rack::BodyParser is heavily inspired by
 
 ## Key Features (differences to Rack::Parser) ##
 
-1. seperation of `params`/`request.params` and the `parsed_body`.
+1. separation of `params`/`request.params` and the `parsed_body`.
 1. (optional) patching of `Rack::Request`:
 
   Access parsed payload through `request.parsed_body` with support 

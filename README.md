@@ -24,7 +24,9 @@ Note: Rack::BodyParser **does** **not** contain any parsers by out of the box.
 
 ## Installation ##
 
-`TODO`
+Via rubygems:
+
+`gem install rack-bodyparser`
 
 ## Usage ##
 

@@ -78,6 +78,20 @@ describe Rack::BodyParser do
       expect(res[0]).to eq(status)
       expect(res[2]).to include(err)
     end
+
+    it 'can override default' do
+      status = 418
+      err = 'I am a teapot'
+      opts = {
+        parsers: { 'text/plain' => proc { raise StandardError, 'it broke' } },
+        handlers: { 'default' => proc { [status, {}, err] } }
+      }
+      res = Rack::BodyParser.new(app, opts).call(request)
+
+      # test response status code and error message
+      expect(res[0]).to eq(status)
+      expect(res[2]).to include(err)
+    end
   end
 
   context 'logger' do

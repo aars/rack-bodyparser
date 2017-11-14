@@ -11,8 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://www.github.com/aars/rack-bodyparser'
   s.summary     = 'Rack Middleware for parsing request body'
   s.description = %(
-    Rack Middleware for parsing request body without touching request.params.
-    Allowing full separation of query_string params and body payload.
+    Rack Middleware for parsing request body without touching or mixing in request.params.
   )
 
   s.files         = `git ls-files`.split("\n")
@@ -21,6 +20,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_dependency 'rack'
-  s.add_development_dependency 'minitest'
+  s.add_development_dependency 'rspec'
   s.add_development_dependency 'rack-test'
 end

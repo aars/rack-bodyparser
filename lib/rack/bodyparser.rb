@@ -1,4 +1,5 @@
 module Rack
+  # BodyParser implementation.
   class BodyParser
     # Where to get input.
     REQUEST_BODY     = 'rack.input'.freeze
@@ -8,17 +9,20 @@ module Rack
     RACK_REQUEST_KEY = 'parsed_body'.freeze
 
     # Default error handler
-    ERROR_MESSAGE = "[Rack::BodyParser] Failed to parse %s: %s\n"
-    ERROR_HANDLER = proc { |e, type|
-      [400, {}, [ERROR_MESSAGE % [type, e.to_s]]]
-    }
+    ERROR_MESSAGE = "[Rack::BodyParser] Failed to parse %s: %s\n".freeze
+
+    ERROR_HANDLER = proc do |e, type|
+      [400, {}, format(ERROR_MESSAGE, type, e.to_s)]
+    end
+
     attr_reader :parsers, :handlers, :logger
 
     def initialize(app, options = {})
       @app      = app
       @parsers  = options.delete(:parsers)  || {}
       @handlers = options.delete(:handlers) || {}
-      @handlers = {'default' => ERROR_HANDLER}.merge(@handlers)
+      @handlers = { 'default' => ERROR_HANDLER }.merge(@handlers)
+      @logger   = options.delete(:logger)
       @options  = options
     end
 
@@ -42,21 +46,19 @@ module Rack
     end
 
     def patch_rack_request(parser, parsed)
-      if parser.respond_to?(:rack_request_key)
-        Rack::Request.send(:define_method, parser.rack_request_key) { parsed }
-      end
-      Rack::Request.send(:define_method, RACK_REQUEST_KEY) { parsed }
+      return unless parser.respond_to?(:rack_request_key)
+      Rack::Request.send(:define_method, parser.rack_request_key) { parsed }
     end
 
     def detect(hash, what)
-      hash.detect { |match, _|
+      hash.detect do |match, _|
         match.is_a?(Regexp) ? what.match(match) : what.eql?(match)
-      }
+      end
     end
 
     def warn!(e, type)
       return unless logger
-      logger.warn ERROR_MESSAGE % [type, e.to_s]
+      logger.warn format(ERROR_MESSAGE, type, e.to_s)
     end
   end
 end

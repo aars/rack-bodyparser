@@ -95,7 +95,7 @@ describe Rack::BodyParser do
   end
 
   context 'logger' do
-    it 'warns or error' do
+    it 'warns on error' do
       err = 'it broke'
       opts = {
         parsers: { 'text/plain' => proc { raise StandardError, err } },

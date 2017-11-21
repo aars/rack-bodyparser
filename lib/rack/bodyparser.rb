@@ -54,6 +54,9 @@ module Rack
       body = request_body(env)
       return unless body && !body.empty?
 
+      # Give env to parser if it has a setter for it.
+      parser.env = env if parser.respond_to? :env=
+
       # parse!
       parsed = parser.call(body)
 

@@ -1,3 +1,7 @@
 Style/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+
+Metrics/LineLength:
+  Exclude:
+    - 'benchmark/**/*.rb'

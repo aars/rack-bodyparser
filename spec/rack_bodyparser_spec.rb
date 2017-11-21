@@ -62,6 +62,18 @@ describe Rack::BodyParser do
       expect(rack_request).to respond_to(custom_getter)
       expect(rack_request.send(custom_getter)).to eq(parsed_response)
     end
+
+    it 'passes env to parser if it has a setter' do
+      opts = {
+        parsers: {
+          'text/plain' => MockParserWithEnvSetter
+        }
+      }
+      Rack::BodyParser.new(app, opts).call(request)
+
+      # MockParserWithEnvSetter will return env['REQUEST_METHOD'].
+      expect(request[parsed_env_key]).to eq(request['REQUEST_METHOD'])
+    end
   end
 
   context 'handlers' do

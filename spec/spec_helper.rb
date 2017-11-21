@@ -19,6 +19,17 @@ module MockParser
   end
 end
 
+# MockParser to test env setter. Will return env['REQUEST_METHOD'] when called.
+module MockParserWithEnvSetter
+  def self.call(_body)
+    @env['REQUEST_METHOD']
+  end
+
+  def self.env=(env)
+    @env = env
+  end
+end
+
 module MockLogger
   def self.warn(_msg)
     'you were warned!'

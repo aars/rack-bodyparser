@@ -16,8 +16,8 @@ but behaves a bit different. See Key Features.
 
 1. (optional) patching of `Rack::Request` with support for custom getter method Parsed result available as `request.parsed_body` with support for custom `request.#{your_key_here}` per parser. Enable with `:patch_request => true`.
 
-1. (optional) access to headers/env. If your parser `respond_to? :env=` it will be invoked with Rack's
-`env` just before running `call` on your parser.
+1. (optional) access to headers/env. If your parser `respond_to? :env=`, this setter method will be 
+invoked with Rack's `env` just before running `call` on your parser.
 
 #### Batteries not included ####
 

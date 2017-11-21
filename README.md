@@ -16,6 +16,8 @@ but behaves a bit different. See Key Features.
 
 1. (optional) patching of `Rack::Request` with support for custom getter method Parsed result available as `request.parsed_body` with support for custom `request.#{your_key_here}` per parser. Enable with `:patch_request => true`.
 
+1. (optional) access to headers/env. If your parser `respond_to? :env=` it will be invoked with Rack's
+`env` just before running `call` on your parser.
 
 #### Batteries not included ####
 
@@ -43,7 +45,7 @@ Sinatra example:
 use Rack::BodyParser, :parsers => { 
   'application/json' => proc { |data| JSON.parse data },
   'application/xml'  => proc { |data| XML.parse data },
-  %r{msgpack}        => proc { |data| Msgpack.parse data }
+  /msgpack/          => proc { |data| Msgpack.parse data }
 }
 
 post '/' do
@@ -122,6 +124,28 @@ post '/' do
   puts request.parsed_body
   puts request.document
 end
+```
+## Request headers/environment ##
+
+Need headers or other data from Rack's `env` in your parser? Set up your parser
+with a setter method, `respond_to? :env=`, and it will be invoked just before running
+the main `call` method.
+
+```ruby
+
+module ThisParserNeedsHeaders
+  def self.env=(env)
+    @env = env
+  end
+
+  def self.call(body)
+    # @env available here for your parsing pleasure.
+  end
+end
+
+use Rack::BodyParser, :parsers => { 
+  'plain/text' => ThisParserNeedsHeaders 
+}
 ```
 
 ## Copyright

@@ -11,12 +11,15 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://www.github.com/aars/rack-bodyparser'
   s.summary     = 'Rack Middleware for parsing request body'
   s.description = %(
-    Rack Middleware for parsing request body without touching or mixing in request.params.
+    Rack Middleware for parsing request body without touching or
+    mixing in request.params.
   )
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
+  s.executables   = `git ls-files -- bin/*`.split("\n").map do |f|
+    File.basename(f)
+  end
   s.require_paths = ['lib']
 
   s.add_dependency 'rack'

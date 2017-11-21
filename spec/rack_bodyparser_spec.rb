@@ -16,13 +16,25 @@ describe Rack::BodyParser do
       expect(request).not_to have_key(parsed_env_key)
     end
 
-    it 'uses the correct parser for configured media-type' do
+    it 'uses the correct parser for configured media-type (string)' do
       parsed_response = 'plain text parsed!'
       opts = {
         parsers: {
           'application/xml'  => proc { 'not me' },
           'text/plain'       => proc { parsed_response },
           'application/json' => proc { 'not me' }
+        }
+      }
+      Rack::BodyParser.new(app, opts).call(request)
+
+      expect(request[parsed_env_key]).to eq(parsed_response)
+    end
+
+    it 'uses the correct parser for configured media-type (regexp)' do
+      parsed_response = 'plain text parsed!'
+      opts = {
+        parsers: {
+          /plain/ => proc { parsed_response }
         }
       }
       Rack::BodyParser.new(app, opts).call(request)
